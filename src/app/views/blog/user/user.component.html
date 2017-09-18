@@ -1,0 +1,15 @@
+<div class="login-container" fxLayout="row" fxLayoutAlign="center center">
+  <md-card>
+    <nav md-tab-nav-bar>
+      <a md-tab-link routerLink="login" routerLinkActive [routerLinkActiveOptions]="{ exact: true }" #rlaLogin="routerLinkActive"
+        [active]="rlaLogin.isActive">
+       Login
+      </a>
+      <a md-tab-link routerLink="register" routerLinkActive [routerLinkActiveOptions]="{ exact: true }" #rlaRegister="routerLinkActive"
+        [active]="rlaRegister.isActive">
+       Register
+   </a>
+    </nav>
+    <router-outlet></router-outlet>
+  </md-card>
+</div>

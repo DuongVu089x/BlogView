@@ -1,0 +1,77 @@
+.article-component {
+  padding: 0 20px;
+  background-color: #F5F5F5;
+  font-weight: normal;
+  line-height: 1.5em;
+  position: relative;
+}
+
+.article-detail {
+  padding: 0 25px;
+  margin: 10px 25px;
+  background-color: white;
+}
+
+.author-block img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.author-block {
+  position: absolute;
+  top: 74%;
+  width: 100%;
+  background: blanchedalmond;
+  padding: 10px;
+  opacity: .8;
+  z-index: 1;
+  display: none!important;
+  transition: .4s;
+}
+
+.title-block {
+  overflow: hidden;
+  position: relative;
+}
+
+article img {
+  width: 100%;
+  height: auto;
+}
+
+p {
+  font-size: 1.2em;
+}
+
+img.img-title {
+  width: 100%;
+}
+
+.comment {
+  margin: 5px 0;
+  display: none;
+}
+
+.comment.show-comment-block {
+  display: block;
+}
+
+@media only screen and (min-width: 768px) {
+  /* For desktop: */
+  .title-block:hover .author-block {
+    display: flex!important;
+  }
+}
+
+@media only screen and (min-width: 600px) {
+  /* For tablets: */
+  .title-block:hover .author-block {
+    display: flex!important;
+  }
+}
+
+md-form-field.mat-input-container.mat-form-field.ng-tns-c9-0 {
+  width: 100%;
+  margin-top: 10px;
+}

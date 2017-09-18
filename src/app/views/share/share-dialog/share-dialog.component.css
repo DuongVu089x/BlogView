@@ -1,0 +1,15 @@
+button.google.mat-raised-button {
+  background: #db4437;
+}
+
+button.twitter.mat-raised-button {
+  background: #006dbf;
+}
+
+button.facebook.mat-raised-button {
+  background: #4267b2;
+}
+
+.mat-raised-button {
+  color: white;
+}

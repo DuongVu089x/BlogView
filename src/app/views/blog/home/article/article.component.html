@@ -1,0 +1,36 @@
+<div layout="row" layout-margin layout-wrap layout-align="center center">
+  <md-card>
+    <div class="content">
+      <md-card-header>
+        <a md-card-avatar class="header-image" [ngStyle]="{'background': '#fff url(' + uri + ') no-repeat 0 0'}" href="{{uri}}">
+        </a>
+        <md-card-title>Dog Breed</md-card-title>
+        <md-card-subtitle><a href="">21:00 hôm nay</a> trong <a href="">iOS</a></md-card-subtitle>
+      </md-card-header>
+      <md-card-content>
+        <img [src]="article.urlTile" />
+        <a  [routerLink]="['/blog/article-details', 1]">[Review] iPad Pro 10.5 + Smart Keyboard đã làm mình muốn rời xa MacBook Pro</a>
+        <p>
+          Trong bài này mình sẽ đánh giá chung hai món: iPad Pro 10.5 và bàn phím Apple Smart Keyboard. Hai món này hợp lại sẽ giải
+          quyết được hầu hết các nhu cầu cơ bản của bạn trên máy tính. Thực tế mình đã gần như bỏ xó cái MacBook Pro 15”
+          Touch Bar (MBP) kể từ khi xài chúng. Mời các bạn đọc bài đánh giá. <br>Lưu ý: các yếu tố đề ra trong
+          bài cũng như…
+        </p>
+      </md-card-content>
+      <md-card-actions>
+        <button md-fab color="warn">
+          <md-icon aria-label="Example icon-button with a heart icon">favorite</md-icon>
+          <p class="text">123</p>
+        </button>
+        <button md-fab color="warn">
+          <md-icon aria-label="Example icon-button with a heart icon">screen_share</md-icon>
+          <p class="text">123</p>
+        </button>
+        <button md-fab color="warn">
+          <md-icon aria-label="Example icon-button with a heart icon">mode_comment</md-icon>
+          <p class="text">123</p>
+        </button>
+      </md-card-actions>
+    </div>
+  </md-card>
+</div>

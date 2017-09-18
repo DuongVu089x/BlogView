@@ -1,0 +1,20 @@
+<form fxLayout="column" name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
+  <md-form-field>
+    <input mdInput name="email" placeholder="Email" [(ngModel)]="errorMessage" #email="ngModel" required>
+    <md-icon mdSuffix>person</md-icon>
+    <md-error>
+      Please enter a valid email address
+    </md-error>
+  </md-form-field>
+  <md-form-field>
+    <input mdInput name="password" [type]="isActive? 'password': 'text'" [(ngModel)]="password" placeholder="Password" required
+      minlength="6" maxlength="50">
+    <md-icon class="visibility" (click)="changeIcon()" mdSuffix>{{icon}}</md-icon>
+    <md-error>
+      Please enter a valid password address
+    </md-error>
+  </md-form-field>
+  <div fxFlex="33" fxFlexAlign="end">
+    <button md-raised-button [disabled]="!f.form.valid">Login</button>
+  </div>
+</form>

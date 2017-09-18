@@ -1,0 +1,21 @@
+ul#dropdown2 {
+  top: 100%!important;
+}
+
+@media only screen and (max-width: 992px) {
+  header,
+  main,
+  footer {
+    padding-left: 0;
+  }
+}
+
+.nav {
+  padding: 0 30px;
+}
+
+div#header.nav-fixed {
+  position: fixed;
+  width: 100%;
+  z-index: 9999;
+}

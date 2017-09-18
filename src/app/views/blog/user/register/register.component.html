@@ -1,0 +1,28 @@
+<form fxLayout="column" name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
+  <md-form-field>
+    <input mdInput name="email" placeholder="Email" [(ngModel)]="user.email" #email="ngModel" [pattern]="EMAIL_REGEX" required>
+    <md-icon mdSuffix>person</md-icon>
+    <md-error>
+      Please enter a valid email address
+    </md-error>
+  </md-form-field>
+  <md-form-field>
+    <input mdInput name="password" [type]="isActivePasword? 'password': 'text'" autocomplete="off" #password="ngModel" [(ngModel)]="user.password"
+      placeholder="Password" required minlength="6" maxlength="50">
+    <md-icon class="visibility" (click)="changeIcon(1)" mdSuffix>{{iconPassword}}</md-icon>
+    <md-error>
+      Please enter a valid password
+    </md-error>
+  </md-form-field>
+  <md-form-field>
+    <input mdInput name="confirmPassword" [type]="isActiveConfirmPassword? 'password': 'text'" autocomplete="off" #confirmPassword="ngModel" [(ngModel)]="user.confirmPassword"
+      placeholder="Confirm Password" validateEqual="password" required>
+    <md-icon class="visibility" (click)="changeIcon(2)" mdSuffix>{{iconConfirmPassword}}</md-icon>
+    <md-error>
+      Confirm password not match
+    </md-error>
+  </md-form-field>
+  <div fxFlex="33" fxFlexAlign="end">
+    <button md-raised-button [disabled]="!f.form.valid">Login</button>
+  </div>
+</form>

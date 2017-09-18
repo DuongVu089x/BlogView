@@ -1,0 +1,13 @@
+li a {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 10%;
+}
+li {
+    position: relative;
+}
+li img {
+    min-width: 30px;
+    height: 30px;
+}

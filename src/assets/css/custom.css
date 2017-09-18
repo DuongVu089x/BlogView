@@ -1,0 +1,12 @@
+app-article-detail img {
+  width: 100%;
+}
+
+article img {
+  width: 100% !important;
+}
+
+ul.collection.with-header {
+  position: fixed;
+  width: 300px;
+}

@@ -1,0 +1,13 @@
+header,
+main,
+footer {
+  padding-left: 300px;
+}
+.mat-form-field-infix{
+  padding: 0!important;
+}
+
+body{
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+}

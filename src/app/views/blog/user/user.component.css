@@ -1,0 +1,10 @@
+a.mat-tab-link {
+  height: auto;
+  color: white;
+  font-weight: bold;
+  font-size: 1.4em;
+}
+
+.mat-ink-bar {
+  height: 4px!important;
+}
