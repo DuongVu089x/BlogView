@@ -72,6 +72,6 @@ img.img-title {
 }
 
 md-form-field.mat-input-container.mat-form-field.ng-tns-c9-0 {
-  width: 100%;
-  margin-top: 10px;
+  width: 100%!important;
+  margin-top: 10px!important;
 }

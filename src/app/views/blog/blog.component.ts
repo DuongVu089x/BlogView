@@ -8,22 +8,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BlogComponent implements OnInit {
 
-  result : string;
+  result: string;
 
   constructor(private _dataService: DataService) { }
 
   ngOnInit() {
-    //this.test();
     $.get('../../../assets/js/custom.js');
     $.get('../../../assets/css/custom.css');
-  
   }
 
   test() {
     this._dataService.get('/').subscribe((response: string) => {
       console.log(response);
       this.result = response;
-    }, error =>{
+    }, error => {
       console.log("error");
     })
   }
