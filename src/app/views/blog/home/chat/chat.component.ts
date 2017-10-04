@@ -1,6 +1,6 @@
-import { ChatService } from './../../core/services/chat/chat.service';
-import { DataService } from './../../core/services/data/data.service';
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
+import { ChatService } from './../../../../core/services/chat/chat.service';
+import { DataService } from './../../../../core/services/data/data.service';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, AfterViewChecked, HostListener } from '@angular/core';
 import * as io from 'socket.io-client';
 
 @Component({
@@ -8,14 +8,19 @@ import * as io from 'socket.io-client';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css']
 })
-export class ChatComponent implements OnInit, AfterViewChecked {
+export class ChatComponent implements OnInit {
 
   public listMessage: any[];
   public listUser: any[];
   public message: string;
+  public isLogin = false;
 
   @ViewChild('wrapper')
   private divWrapper: ElementRef;
+  @ViewChild('chatBlock')
+  private divChatBlock: ElementRef;
+
+  private listBlockChat: any[];
 
   height = 300;
   chats: any;
@@ -42,10 +47,15 @@ export class ChatComponent implements OnInit, AfterViewChecked {
 
   currentUser: any;
 
+  positionTop: number;
+  maxWidth: number;
+
   socket = io('http://localhost:3000');
 
   constructor(private _dataService: DataService,
     private chatService: ChatService) {
+
+    this.listBlockChat = [];
   }
 
   ngOnInit() {
@@ -55,13 +65,10 @@ export class ChatComponent implements OnInit, AfterViewChecked {
 
     const that = this;
     this.socket.on('new-message', function (data: any) {
-      console.log(data);
       that.listMessage.push(data);
     });
-  }
-
-  ngAfterViewChecked(): void {
-    this.scrollToBottom();
+    this.positionTop = window.screen.height - 400;
+    this.maxWidth = window.screen.width / 5;
   }
 
   getListUser() {
@@ -101,18 +108,22 @@ export class ChatComponent implements OnInit, AfterViewChecked {
 
   getChatByRoom(participants) {
     if (this.roomId !== undefined) {
-      console.log(this.roomId);
       this.socket.emit('leave-room', this.roomId);
     }
     this.chatService.getChatByRoom(participants).then((res: any) => {
       this.roomId = res.roomId;
       if (this.roomId === -1) {
         this.createChatRoom(participants);
+      } else {
+        this.getListMessageByRoomId();
       }
-      this.getListMessageByRoomId();
+
+      const indexRoom = this.listBlockChat.indexOf(this.roomId);
+      if (indexRoom < 0) {
+        this.listBlockChat.push(this.roomId);
+      }
 
       this.socket.emit('room', this.roomId);
-
     }, (err) => {
       console.log(err);
     });
@@ -142,7 +153,6 @@ export class ChatComponent implements OnInit, AfterViewChecked {
         user: this.user._id,
         room: this.roomId
       }
-      console.log(data);
       this.chatService.createMessage(JSON.stringify(data)).then((res: any) => {
         this.socket.emit('save-message', data);
         this.listMessage.push(data);
@@ -151,5 +161,10 @@ export class ChatComponent implements OnInit, AfterViewChecked {
         console.log(err);
       })
     }
+  }
+
+  closeChat(index) {
+    index = this.listBlockChat.indexOf(index);
+    this.listBlockChat.splice(index, 1);
   }
 }

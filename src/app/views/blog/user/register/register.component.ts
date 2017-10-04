@@ -1,3 +1,6 @@
+import { Router } from '@angular/router';
+import { SystemConstants } from 'app/core/commons/system.constants';
+import { LoginService } from './../../../../core/services/login/login.service';
 import { Validators } from '@angular/forms';
 import { FormControl } from '@angular/forms';
 import { UserModel } from './../../../../core/models/user.models';
@@ -13,19 +16,20 @@ export class RegisterComponent implements OnInit {
 
   EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
-  iconPassword = "visibility";
-  iconConfirmPassword = "visibility";
+  iconPassword = 'visibility';
+  iconConfirmPassword = 'visibility';
   isActivePasword = true;
   isActiveConfirmPassword = true;
 
   registerForm: FormGroup;
+  error: any;
   public user = {
-    email: "",
-    password: "",
-    confirmPassword: ""
+    email: '',
+    password: '',
+    confirmPassword: ''
   }
 
-  constructor() {
+  constructor(private _loginService: LoginService, private router: Router) {
 
   }
 
@@ -35,39 +39,31 @@ export class RegisterComponent implements OnInit {
   changeIcon(type: number) {
     switch (type) {
       case 1:
-        // if (this.isActivePasword) {
-        //   this.iconPassword = "visibility";
-        // } else {
-        //   this.iconPassword = "visibility_off";
-        // }
-        // this.isActivePasword = !this.isActivePasword;
-        this.changeStatus(this.isActivePasword, this.iconPassword);
+        if (this.isActivePasword) {
+          this.iconPassword = 'visibility';
+        } else {
+          this.iconPassword = 'visibility_off';
+        }
+        this.isActivePasword = !this.isActivePasword;
         break;
       case 2:
-        // if (this.isActiveConfirmPassword) {
-        //   this.iconConfirmPassword = "visibility";
-        // } else {
-        //   this.iconConfirmPassword = "visibility_off";
-        // }
-        // this.isActiveConfirmPassword = !this.isActiveConfirmPassword;
-        this.changeStatus(this.isActiveConfirmPassword, this.iconConfirmPassword)
+        if (this.isActiveConfirmPassword) {
+          this.iconConfirmPassword = 'visibility';
+        } else {
+          this.iconConfirmPassword = 'visibility_off';
+        }
+        this.isActiveConfirmPassword = !this.isActiveConfirmPassword;
         break;
     }
   }
 
-  private changeStatus(isActive: boolean, icon: string) {
-    if (isActive) {
-      icon = "visibility";
-    } else {
-      icon = "visibility_off";
-    }
-    isActive = !isActive;
-  }
-
-  checkComfirmPassword(password: string): boolean {
-    return this.user.password === password;
-  }
-  login() {
-
+  register() {
+    this._loginService.register(this.user)
+      .then((res: any) => {
+        this.user = res;
+        this.router.navigate(['/blog/user/login']);
+      }, err => {
+        this.error = JSON.parse(err._body).message;
+      });
   }
 }

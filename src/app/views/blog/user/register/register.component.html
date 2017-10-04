@@ -1,4 +1,7 @@
-<form fxLayout="column" name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
+<form fxLayout="column" name="form" (ngSubmit)="f.form.valid && register()" #f="ngForm" novalidate>
+  <md-error>
+    {{error}}
+  </md-error>
   <md-form-field>
     <input mdInput name="email" placeholder="Email" [(ngModel)]="user.email" #email="ngModel" [pattern]="EMAIL_REGEX" required>
     <md-icon mdSuffix>person</md-icon>
@@ -15,14 +18,14 @@
     </md-error>
   </md-form-field>
   <md-form-field>
-    <input mdInput name="confirmPassword" [type]="isActiveConfirmPassword? 'password': 'text'" autocomplete="off" #confirmPassword="ngModel" [(ngModel)]="user.confirmPassword"
-      placeholder="Confirm Password" validateEqual="password" required>
+    <input mdInput name="confirmPassword" [type]="isActiveConfirmPassword? 'password': 'text'" autocomplete="off" #confirmPassword="ngModel"
+      [(ngModel)]="user.confirmPassword" placeholder="Confirm Password" validateEqual="password" required minlength="6" maxlength="50">
     <md-icon class="visibility" (click)="changeIcon(2)" mdSuffix>{{iconConfirmPassword}}</md-icon>
     <md-error>
       Confirm password not match
     </md-error>
   </md-form-field>
   <div fxFlex="33" fxFlexAlign="end">
-    <button md-raised-button [disabled]="!f.form.valid">Login</button>
+    <button md-raised-button [disabled]="!f.form.valid">Register</button>
   </div>
 </form>

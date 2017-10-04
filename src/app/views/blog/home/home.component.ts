@@ -1,3 +1,4 @@
+import { UserService } from './../../../core/services/user/user.service';
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
@@ -15,9 +16,12 @@ export class HomeComponent implements OnInit {
     }
   ]
 
-  constructor(private http: HttpClient) { }
+  listFriend: any[];
+
+  constructor(private http: HttpClient, private _userService: UserService) { }
 
   ngOnInit() {
+
   }
 
   onScroll() {
@@ -26,4 +30,10 @@ export class HomeComponent implements OnInit {
       'title': '[Review] iPad Pro 10.5 + Smart Keyboard đã làm mình muốn rời xa MacBook Pro'
     });
   }
+
+  getListFriend() {
+
+  }
+
+
 }

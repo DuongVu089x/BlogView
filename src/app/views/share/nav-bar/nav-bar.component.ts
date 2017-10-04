@@ -18,7 +18,7 @@ export class NavBarComponent implements OnInit {
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
-    const height = document.body.scrollTop;
+    const height = document.scrollingElement.scrollTop;
     const heightHeader = this.el.nativeElement.offsetHeight;
     if (height > (heightHeader + 100) && !this.flag) {
       this.flag = true;

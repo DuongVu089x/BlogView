@@ -6,8 +6,5 @@ export const appRoutes: Routes = [
     },
     {
         path: 'blog', loadChildren: './views/blog/blog.module#BlogModule'
-    },
-    {
-        path: 'chat', loadChildren: './views/chat/chat.module#ChatModule'
     }
 ]

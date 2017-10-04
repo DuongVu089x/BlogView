@@ -1,3 +1,5 @@
+import { LoginService } from './../../../core/services/login/login.service';
+import { DataService } from './../../../core/services/data/data.service';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
@@ -16,10 +18,10 @@ export const userRoutes: Routes = [
                 path: '', redirectTo: 'login'
             },
             {
-                path: 'login', loadChildren:'./login/login.module#LoginModule'
+                path: 'login', loadChildren: './login/login.module#LoginModule'
             },
             {
-                path: 'register', loadChildren:'./register/register.module#RegisterModule'
+                path: 'register', loadChildren: './register/register.module#RegisterModule'
             }
         ]
     }
@@ -36,6 +38,6 @@ export const userRoutes: Routes = [
         FlexLayoutModule
     ],
     declarations: [UserComponent],
-    //providers: [DataService]
+    providers: [DataService, LoginService]
 })
 export class UserModule { }

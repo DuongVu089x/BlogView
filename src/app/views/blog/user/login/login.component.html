@@ -1,13 +1,14 @@
 <form fxLayout="column" name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
+  <p style="color: red; padding: 5px; text-align: center; font-weight: bold">{{errorMessage}}</p>
   <md-form-field>
-    <input mdInput name="email" placeholder="Email" [(ngModel)]="errorMessage" #email="ngModel" required>
+    <input mdInput name="email" placeholder="Email" [(ngModel)]="user.email" #email="ngModel" required [pattern]="EMAIL_REGEX">
     <md-icon mdSuffix>person</md-icon>
     <md-error>
       Please enter a valid email address
     </md-error>
   </md-form-field>
   <md-form-field>
-    <input mdInput name="password" [type]="isActive? 'password': 'text'" [(ngModel)]="password" placeholder="Password" required
+    <input mdInput name="password" [type]="isActive? 'password': 'text'" [(ngModel)]="user.password" placeholder="Password" required
       minlength="6" maxlength="50">
     <md-icon class="visibility" (click)="changeIcon()" mdSuffix>{{icon}}</md-icon>
     <md-error>

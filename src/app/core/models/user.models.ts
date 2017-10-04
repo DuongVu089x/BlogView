@@ -3,7 +3,7 @@ export class UserModel {
         this.id = id;
         this.email = email;
         this.password = password;
-        if (address.length != 0) {
+        if (address.length !== 0) {
             this.address = address
         }
     }

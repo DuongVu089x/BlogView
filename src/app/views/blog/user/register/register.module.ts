@@ -4,7 +4,7 @@ import { RegisterComponent } from './register.component';
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HomeModule } from "app/views/blog/home/home.module";
+import { HomeModule } from 'app/views/blog/home/home.module';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MdInputModule, MdGridListModule, MdIconModule, MdToolbarModule, MdButtonModule, MdCheckboxModule, MdTabsModule, MdFormFieldModule } from "@angular/material";
 

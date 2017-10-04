@@ -1,3 +1,4 @@
+import { NavBarComponent } from './views/share/nav-bar/nav-bar.component';
 import { Http } from '@angular/http';
 import { appRoutes } from './app.routes';
 import { BrowserModule } from '@angular/platform-browser';

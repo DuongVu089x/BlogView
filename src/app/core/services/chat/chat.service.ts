@@ -6,10 +6,7 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class ChatService {
-  private headers: Headers;
-  constructor(private http: Http, private _dataService: DataService) {
-    this.headers = new Headers();
-    this.headers.append('Content-Type', 'application/json');
+  constructor(private _dataService: DataService) {
   }
 
   getChatByRoom(participants) {
@@ -36,7 +33,7 @@ export class ChatService {
 
   getListMessageByRoomId(roomId) {
     return new Promise((resolve, reject) => {
-      this._dataService.post('/api/user/get-list-message-by-room', roomId)
+      this._dataService.post('/api/message/get-list-message-by-room', roomId)
         .subscribe(res => {
           resolve(res);
         }, err => {
@@ -47,7 +44,7 @@ export class ChatService {
 
   createMessage(message) {
     return new Promise((resolve, reject) => {
-      this._dataService.post('/api/user/create-message', message)
+      this._dataService.post('/api/message/create-message', message)
         .subscribe(res => {
           resolve(res);
         }, err => {
@@ -56,15 +53,6 @@ export class ChatService {
     })
   }
 
-  login(user) {
-    return new Promise((resolve, reject) => {
-      this._dataService.post('/api/user/login', user)
-        .subscribe(res => {
-          resolve(res);
-        }, err => {
-          reject(err);
-        })
-    })
-  }
+
 
 }

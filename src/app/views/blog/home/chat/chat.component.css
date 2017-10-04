@@ -10,7 +10,6 @@
 
 .list-message {
   height: 80%;
-  padding-right: 20px;
   display: table-cell;
   vertical-align: bottom;
 }
@@ -28,4 +27,42 @@
 ::-webkit-scrollbar-thumb {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
   background-color: #555;
+}
+
+.message-content {
+  max-width: 240px;
+  display: block;
+}
+
+.message-content p {
+  word-wrap: break-word;
+}
+
+.message-content p.my-message {
+  text-align: end;
+}
+
+img.avatar {
+  border-radius: 50%;
+  margin: 5px;
+}
+
+.fill-remaining-space {
+  flex: 1 1 auto;
+}
+
+a.mat-tab-link {
+  height: auto;
+  color: white;
+  font-weight: bold;
+  font-size: 1.4em;
+}
+
+.mat-ink-bar {
+  height: 4px!important;
+}
+
+md-list ::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
 }
