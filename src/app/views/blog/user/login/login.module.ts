@@ -1,11 +1,13 @@
+import { AuthenticationService } from './../../../../core/services/authentication/authentication.service';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { LoginComponent } from './login.component';
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HomeModule } from "app/views/blog/home/home.module";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { MdInputModule, MdIconModule, MdToolbarModule, MdButtonModule, MdCheckboxModule } from "@angular/material";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MdInputModule, MdIconModule, MdToolbarModule, MdButtonModule, MdCheckboxModule } from '@angular/material';
+
+import { LoginComponent } from './login.component';
+import { HomeModule } from 'app/views/blog/home/home.module';
 
 export const loginRoutes: Routes = [
     {
@@ -26,8 +28,8 @@ export const loginRoutes: Routes = [
         RouterModule.forChild(loginRoutes)
     ],
     declarations: [LoginComponent],
-    providers: [],
-    exports:[
+    providers: [AuthenticationService],
+    exports: [
         LoginComponent
     ]
 })

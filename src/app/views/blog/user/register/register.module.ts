@@ -5,8 +5,17 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HomeModule } from 'app/views/blog/home/home.module';
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { MdInputModule, MdGridListModule, MdIconModule, MdToolbarModule, MdButtonModule, MdCheckboxModule, MdTabsModule, MdFormFieldModule } from "@angular/material";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+    MdInputModule,
+    MdGridListModule,
+    MdIconModule,
+    MdToolbarModule,
+    MdButtonModule,
+    MdCheckboxModule,
+    MdTabsModule,
+    MdFormFieldModule
+} from '@angular/material';
 
 export const loginRoutes: Routes = [
     {

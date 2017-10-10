@@ -7,6 +7,27 @@ export class AuthenticationService {
 
   constructor(private _dataService: DataService) { }
 
+  login(user) {
+    return new Promise((resolve, reject) => {
+      this._dataService.post('/api/user/login', user)
+        .subscribe(res => {
+          resolve(res);
+        }, err => {
+          reject(err);
+        })
+    });
+  }
+
+  register(user) {
+    return new Promise((resolve, reject) => {
+      this._dataService.post('/api/user/register', user)
+        .subscribe(res => {
+          resolve(res);
+        }, err => {
+          reject(err);
+        })
+    })
+  }
 
   isUserAuthenticated(): boolean {
     const user = localStorage.getItem(SystemConstants.CURRENT_USER);

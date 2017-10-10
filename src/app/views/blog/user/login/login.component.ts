@@ -1,11 +1,11 @@
 import { Router } from '@angular/router';
-import { SystemConstants } from 'app/core/commons/system.constants';
-import { LoginService } from './../../../../core/services/login/login.service';
-import { UserModel } from './../../../../core/models/user.models';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { MdTabChangeEvent } from '@angular/material';
 
+import { SystemConstants } from 'app/core/commons/system.constants';
+import { AuthenticationService } from './../../../../core/services/authentication/authentication.service';
+import { UserModel } from './../../../../core/models/user.models';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
   user: any;
   errorMessage = '';
   password = '';
-  constructor(private _loginService: LoginService, private router: Router) {
+  constructor(private _authenticationService: AuthenticationService, private router: Router) {
     this.user = {};
   }
 
@@ -40,16 +40,16 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this._loginService.login(this.user)
+    this._authenticationService.login(this.user)
       .then((res: any) => {
         this.user = res;
         localStorage.removeItem(SystemConstants.CURRENT_USER);
         localStorage.setItem(SystemConstants.CURRENT_USER, JSON.stringify(this.user));
+        // console.log(localStorage.getItem(SystemConstants.CURRENT_USER), '12 ' + this.user);
         this.router.navigate(['/blog/home']);
       }, err => {
         this.errorMessage = JSON.parse(err._body).message;
-        console.log(this.errorMessage)
+        console.log(this.errorMessage);
       });
-    console.log('Login', this.user);
   }
 }

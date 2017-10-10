@@ -6,9 +6,9 @@ export class UserService {
 
   constructor(private _dataService: DataService) { }
 
-  getListFriend(myId) {
+  getListFriend(myEmail) {
     return new Promise((resolve, reject) => {
-      this._dataService.post('/api/user/get-list-friend', myId)
+      this._dataService.post('/api/friend/get-list-friend', myEmail)
         .subscribe(res => {
           resolve(res);
         }, err => {

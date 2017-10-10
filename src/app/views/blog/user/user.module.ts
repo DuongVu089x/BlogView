@@ -1,16 +1,16 @@
-import { LoginService } from './../../../core/services/login/login.service';
-import { DataService } from './../../../core/services/data/data.service';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { LoginComponent } from './login/login.component';
-import { UserComponent } from './user.component';
 import { MdCardModule, MdTabsModule } from '@angular/material';
 import { RouterModule, Routes, RouterLinkActive } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
+import { LoginComponent } from './login/login.component';
+import { UserComponent } from './user.component';
 import { HomeModule } from 'app/views/blog/home/home.module';
 import { RegisterComponent } from './register/register.component';
-
+import { AuthenticationService } from './../../../core/services/authentication/authentication.service';
+import { DataService } from './../../../core/services/data/data.service';
 export const userRoutes: Routes = [
     {
         path: '', component: UserComponent, children: [
@@ -38,6 +38,6 @@ export const userRoutes: Routes = [
         FlexLayoutModule
     ],
     declarations: [UserComponent],
-    providers: [DataService, LoginService]
+    providers: [DataService, AuthenticationService]
 })
 export class UserModule { }

@@ -1,6 +1,6 @@
+import { AuthenticationService } from './../../../../core/services/authentication/authentication.service';
 import { Router } from '@angular/router';
 import { SystemConstants } from 'app/core/commons/system.constants';
-import { LoginService } from './../../../../core/services/login/login.service';
 import { Validators } from '@angular/forms';
 import { FormControl } from '@angular/forms';
 import { UserModel } from './../../../../core/models/user.models';
@@ -29,7 +29,7 @@ export class RegisterComponent implements OnInit {
     confirmPassword: ''
   }
 
-  constructor(private _loginService: LoginService, private router: Router) {
+  constructor(private _authenticationService: AuthenticationService, private router: Router) {
 
   }
 
@@ -58,7 +58,7 @@ export class RegisterComponent implements OnInit {
   }
 
   register() {
-    this._loginService.register(this.user)
+    this._authenticationService.register(this.user)
       .then((res: any) => {
         this.user = res;
         this.router.navigate(['/blog/user/login']);

@@ -1,6 +1,8 @@
-import { UserService } from './../../../core/services/user/user.service';
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+
+import { SystemConstants } from './../../../core/commons/system.constants';
+import { UserService } from './../../../core/services/user/user.service';
 
 @Component({
   selector: 'app-home',
@@ -16,12 +18,12 @@ export class HomeComponent implements OnInit {
     }
   ]
 
-  listFriend: any[];
+  listFriends: any[];
 
   constructor(private http: HttpClient, private _userService: UserService) { }
 
   ngOnInit() {
-
+    this.getListFriend();
   }
 
   onScroll() {
@@ -32,7 +34,20 @@ export class HomeComponent implements OnInit {
   }
 
   getListFriend() {
-
+    // tslint:disable-next-line:prefer-const
+    let userInfo = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER));
+    console.log(userInfo);
+    // tslint:disable-next-line:prefer-const
+    let email = {
+      email: userInfo.user
+    }
+    this._userService.getListFriend(email)
+      .then((res: any) => {
+        this.listFriends = res;
+        console.log(this.listFriends);
+      }, err => {
+        console.log(err);
+      });
   }
 
 

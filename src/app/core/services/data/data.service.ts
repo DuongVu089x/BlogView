@@ -9,6 +9,7 @@ export class DataService {
   private headers: Headers;
   constructor(private _http: Http, private _router: Router) {
     this.headers = new Headers();
+    this.headers.append('Authorization', `Bearer ${JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER)).token}`);
     this.headers.append('Content-Type', 'application/json');
   }
 

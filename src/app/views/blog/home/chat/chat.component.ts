@@ -1,6 +1,7 @@
+import { SystemConstants } from './../../../../core/commons/system.constants';
 import { ChatService } from './../../../../core/services/chat/chat.service';
 import { DataService } from './../../../../core/services/data/data.service';
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, AfterViewChecked, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, AfterViewChecked, HostListener, Input } from '@angular/core';
 import * as io from 'socket.io-client';
 
 @Component({
@@ -11,7 +12,7 @@ import * as io from 'socket.io-client';
 export class ChatComponent implements OnInit {
 
   public listMessage: any[];
-  public listUser: any[];
+  // public listUser: any[];
   public message: string;
   public isLogin = false;
 
@@ -20,30 +21,15 @@ export class ChatComponent implements OnInit {
   @ViewChild('chatBlock')
   private divChatBlock: ElementRef;
 
+
+  @Input('listFriends')
+  public listFriends;
+
   private listBlockChat: any[];
-
-  height = 300;
-  chats: any;
-  joinned = false;
-
-  newUser = {
-    nickname: '',
-    room: ''
-  };
-  msgData = {
-    room: 0,
-    nickname: '',
-    message: ''
-  };
 
   roomId;
 
-  user = {
-    _id: '59bfe5c3eb5b610744b35542',
-    firstName: 'anh',
-    lastName: 'tai',
-    email: '12355@gmail.com',
-  };
+  user = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER));
 
   currentUser: any;
 
@@ -54,15 +40,11 @@ export class ChatComponent implements OnInit {
 
   constructor(private _dataService: DataService,
     private chatService: ChatService) {
-
     this.listBlockChat = [];
   }
 
   ngOnInit() {
-    this.listUser = [];
     this.listMessage = [];
-    this.getListUser();
-
     const that = this;
     this.socket.on('new-message', function (data: any) {
       that.listMessage.push(data);
@@ -71,22 +53,16 @@ export class ChatComponent implements OnInit {
     this.maxWidth = window.screen.width / 5;
   }
 
-  getListUser() {
-    this._dataService.get('/api/user/list-user').subscribe((response: any) => {
-      response.listUser.forEach(user => {
-        this.listUser.push(user);
-      });
-    });
-  }
 
   getMessageByUserId(user: any) {
+    console.log(this.user)
     this.listMessage = [];
     this.currentUser = user;
 
     // tslint:disable-next-line:prefer-const
     let participants = {
-      myId: this.user._id,
-      theirId: this.currentUser._id
+      myEmail: this.user.user,
+      theirEmail: this.currentUser.email
     }
 
     this.getChatByRoom(JSON.stringify(participants));
