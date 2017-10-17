@@ -1,3 +1,4 @@
+import { AuthGuard } from './../../core/guards/auth/auth.guard';
 import { ArticleDetailModule } from './article-detail/article-detail.module';
 import { FooterComponent } from './../share/footer/footer.component';
 import { DataService } from './../../core/services/data/data.service';
@@ -21,6 +22,6 @@ import { CommonModule } from '@angular/common';
 
   ],
   declarations: [BlogComponent, NavBarComponent, FooterComponent],
-  providers: [DataService]
+  providers: [AuthGuard]
 })
 export class BlogModule { }

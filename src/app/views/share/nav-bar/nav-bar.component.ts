@@ -1,3 +1,4 @@
+import { SystemConstants } from 'app/core/commons/system.constants';
 import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 
 @Component({
@@ -8,6 +9,9 @@ import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 export class NavBarComponent implements OnInit {
   flag: boolean;
   styleHeader: string;
+
+  user = JSON.parse(JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER))._body);
+
   constructor(private el: ElementRef) {
     this.flag = false;
     this.styleHeader = 'nav-header';

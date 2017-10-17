@@ -1,13 +1,13 @@
 <div class="chat-block" style="margin: 10px 0;">
   <div class="chat-block-input" [style.bottom.px]="0">
     <md-card [style.width.px]="maxWidth" [style.height.px]="positionTop - 50" fxLayout="column" style="padding: 10px; position: fixed; right: 300px; z-index: 100; bottom: 0"
-      #chatBlock *ngFor="let blockChat of listBlockChat;  let i = index" [style.right.px]="300*(i+1)">
+      #chatBlock *ngFor="let blockChat of listBlockChat;  let i = index" [style.right.px]="320*(i+1)">
       <md-card-header *ngIf="currentUser" fxFlex="10">
         <div md-card-avatar class="header-image">
           <img src="https://scontent.fsgn4-1.fna.fbcdn.net/v/t1.0-1/p40x40/11133810_580360328733108_1655132751212319089_n.jpg?oh=6c7919eac401618644afeeeaa635bc14&oe=5A3DD2DA">
         </div>
-        <md-card-title>{{currentUser.email}}</md-card-title>
-        <md-card-subtitle>{{currentUser.firstName + ' ' + currentUser.lastName}}</md-card-subtitle>
+        <md-card-title>{{listUserChat[i].email}}</md-card-title>
+        <md-card-subtitle>{{listUserChat[i].firstName + ' ' + listUserChat[i].lastName}}</md-card-subtitle>
         <md-icon style="position: absolute; right: 5px; top: 10px; color: red; cursor: pointer" (click)="closeChat(i)">close</md-icon>
       </md-card-header>
       <md-card-content fxFlex="80">
@@ -15,7 +15,7 @@
           [scrollTop]="wrapper.scrollHeight">
           <div class="content">
             <div class="list-message">
-              <div class="message-content" *ngFor="let message of listMessage">
+              <div class="message-content" *ngFor="let message of listUserChat[i].listMessage">
                 <p style="margin: 5px;">
                   {{message.content}}
                 </p>
@@ -25,17 +25,18 @@
         </div>
       </md-card-content>
       <div class="action-message" fxLayout="row" style="margin-bottom: 10px" fxFlex="10">
-        <form fxFlex="95" #chatForm="ngForm" (ngSubmit)="createMessage(chatForm.valid)" novalidate>
+        <form fxFlex="95" #chatForm="ngForm" (ngSubmit)="createMessage(chatForm.valid, listUserChat[i], blockChat)" novalidate>
           <md-form-field fxFlex="95" style="height: 40px">
-            <input mdInput type="text" placeholder="Message" [(ngModel)]="message" name="message" required/>
+            <input mdInput type="text" placeholder="Message" [(ngModel)]="listUserChat[i].newMessage" name="newMessage" required/>
           </md-form-field>
           <button md-icon-button color="accent" type="submit" [disabled]="!chatForm.form.valid">
             <md-icon>send</md-icon>
           </button>
         </form>
-        <button md-icon-button color="warn">
+        <button md-icon-button color="warn" (click)="showUpload()">
           <md-icon>image</md-icon>
         </button>
+        <input #btnUploadImg id="upload-img" type="file" style="visibility: hidden; width: 0" (change)="uploadImage($event)" />
       </div>
     </md-card>
   </div>

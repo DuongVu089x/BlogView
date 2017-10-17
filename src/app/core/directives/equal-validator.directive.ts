@@ -2,6 +2,7 @@ import { Directive, forwardRef, Attribute } from '@angular/core';
 import { Validator, AbstractControl, NG_VALIDATORS } from '@angular/forms';
 
 @Directive({
+    // tslint:disable-next-line:directive-selector
     selector: '[validateEqual][formControlName],[validateEqual][formControl],[validateEqual][ngModel]',
     providers: [
         { provide: NG_VALIDATORS, useExisting: forwardRef(() => EqualValidator), multi: true }

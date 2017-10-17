@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { SystemConstants } from './../../../core/commons/system.constants';
 import { UserService } from './../../../core/services/user/user.service';
 
+import { User } from './../../../core/models/user.model';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -18,7 +20,7 @@ export class HomeComponent implements OnInit {
     }
   ]
 
-  listFriends: any[];
+  listFriends: User[];
 
   constructor(private http: HttpClient, private _userService: UserService) { }
 
@@ -34,21 +36,13 @@ export class HomeComponent implements OnInit {
   }
 
   getListFriend() {
-    // tslint:disable-next-line:prefer-const
-    let userInfo = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER));
-    console.log(userInfo);
-    // tslint:disable-next-line:prefer-const
-    let email = {
-      email: userInfo.user
-    }
-    this._userService.getListFriend(email)
-      .then((res: any) => {
+    this._userService.getListFriend({
+      email: JSON.parse(JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER))._body).email
+    })
+      .then((res: User[]) => {
         this.listFriends = res;
-        console.log(this.listFriends);
       }, err => {
         console.log(err);
       });
   }
-
-
 }

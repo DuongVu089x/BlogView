@@ -38,6 +38,6 @@ export const userRoutes: Routes = [
         FlexLayoutModule
     ],
     declarations: [UserComponent],
-    providers: [DataService, AuthenticationService]
+    providers: [AuthenticationService]
 })
 export class UserModule { }

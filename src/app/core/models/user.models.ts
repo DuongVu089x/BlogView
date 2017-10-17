@@ -1,4 +1,8 @@
 export class UserModel {
+    address: string;
+    password: string;
+    email: string;
+    id: string;
     constructor(id: string, email: string, username: string, password: string, address?: string) {
         this.id = id;
         this.email = email;
@@ -7,10 +11,4 @@ export class UserModel {
             this.address = address
         }
     }
-
-    public id: string;
-    public email: string;
-    public username: string;
-    public password: string;
-    public address: string;
 }

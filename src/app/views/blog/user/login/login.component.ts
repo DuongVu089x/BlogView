@@ -45,7 +45,6 @@ export class LoginComponent implements OnInit {
         this.user = res;
         localStorage.removeItem(SystemConstants.CURRENT_USER);
         localStorage.setItem(SystemConstants.CURRENT_USER, JSON.stringify(this.user));
-        // console.log(localStorage.getItem(SystemConstants.CURRENT_USER), '12 ' + this.user);
         this.router.navigate(['/blog/home']);
       }, err => {
         this.errorMessage = JSON.parse(err._body).message;

@@ -9,8 +9,10 @@ export class DataService {
   private headers: Headers;
   constructor(private _http: Http, private _router: Router) {
     this.headers = new Headers();
-    this.headers.append('Authorization', `Bearer ${JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER)).token}`);
+    this.headers.append('Authorization',
+      `Bearer ${JSON.parse(JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER))._body).token}`);
     this.headers.append('Content-Type', 'application/json');
+    console.log();
   }
 
   get(url: string) {
@@ -22,5 +24,17 @@ export class DataService {
   private extracData(res: Response) {
     const body = res.json();
     return body || {};
+  }
+
+  postFile(url: string, data?: any) {
+
+    // tslint:disable-next-line:prefer-const
+    let newHeader = new Headers();
+
+    newHeader.append('Authorization',
+      `Bearer ${JSON.parse(JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER))._body).token}`);
+
+    return this._http.post(SystemConstants.BASE_API + url, data, { headers: newHeader }).map(this.extracData);
+
   }
 }

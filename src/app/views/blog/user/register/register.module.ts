@@ -1,3 +1,4 @@
+import { AuthenticationService } from './../../../../core/services/authentication/authentication.service';
 import { EqualValidator } from './../../../../core/directives/equal-validator.directive';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { RegisterComponent } from './register.component';
@@ -40,7 +41,7 @@ export const loginRoutes: Routes = [
         RouterModule.forChild(loginRoutes)
     ],
     declarations: [RegisterComponent, EqualValidator],
-    providers: [],
+    providers: [AuthenticationService],
     exports: [
         RegisterComponent
     ]

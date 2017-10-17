@@ -1,8 +1,12 @@
-import { SystemConstants } from './../../../../core/commons/system.constants';
-import { ChatService } from './../../../../core/services/chat/chat.service';
-import { DataService } from './../../../../core/services/data/data.service';
+import { RequestOptions } from '@angular/http';
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, AfterViewChecked, HostListener, Input } from '@angular/core';
 import * as io from 'socket.io-client';
+
+import { SystemConstants } from './../../../../core/commons/system.constants';
+import { ChatService } from './../../../../core/services/chat/chat.service';
+import { UploadService } from './../../../../core/services/upload/upload.service';
+import { DataService } from './../../../../core/services/data/data.service';
+import { User } from './../../../../core/models/user.model';
 
 @Component({
   selector: 'app-chat',
@@ -11,82 +15,60 @@ import * as io from 'socket.io-client';
 })
 export class ChatComponent implements OnInit {
 
-  public listMessage: any[];
-  // public listUser: any[];
+  public listUserChat: User[];
+
   public message: string;
-  public isLogin = false;
 
   @ViewChild('wrapper')
   private divWrapper: ElementRef;
-  @ViewChild('chatBlock')
-  private divChatBlock: ElementRef;
 
+  @ViewChild('btnUploadImg')
+  private btnUploadImg: ElementRef;
 
   @Input('listFriends')
-  public listFriends;
+  public listFriends: User[];
 
   private listBlockChat: any[];
 
-  roomId;
+  private roomId: any;
 
-  user = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER));
+  user = JSON.parse(JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER))._body);
 
-  currentUser: any;
+  currentUser: User;
 
   positionTop: number;
   maxWidth: number;
 
-  socket = io('http://localhost:3000');
+  socket = io(SystemConstants.BASE_API);
 
   constructor(private _dataService: DataService,
-    private chatService: ChatService) {
+    private _chatService: ChatService) {
     this.listBlockChat = [];
   }
 
   ngOnInit() {
-    this.listMessage = [];
-    const that = this;
-    this.socket.on('new-message', function (data: any) {
-      that.listMessage.push(data);
-    });
+    this.listUserChat = [];
+
     this.positionTop = window.screen.height - 400;
     this.maxWidth = window.screen.width / 5;
   }
 
 
-  getMessageByUserId(user: any) {
-    console.log(this.user)
-    this.listMessage = [];
+  getMessageByUserId(user: User) {
+    this.listUserChat.push(user);
     this.currentUser = user;
 
-    // tslint:disable-next-line:prefer-const
-    let participants = {
-      myEmail: this.user.user,
-      theirEmail: this.currentUser.email
-    }
-
-    this.getChatByRoom(JSON.stringify(participants));
-  }
-
-  scrollToBottom(): void {
-    try {
-      this.divWrapper.nativeElement.scrollTop = this.divWrapper.nativeElement.scrollHeight;
-    } catch (err) { }
-  }
-
-  getAllMessage(): any {
-    this._dataService.get('/api/user/').subscribe((response: any) => {
-      response.listMessage.forEach(message => {
-        this.listMessage.push(message);
-      });
-    })
+    this.getChatByRoom(JSON.stringify({
+      myId: this.user._id,
+      theirId: this.currentUser._id
+    }));
   }
 
   getChatByRoom(participants) {
-    if (this.roomId !== undefined) {
-      this.socket.emit('leave-room', this.roomId);
-    }
-    this.chatService.getChatByRoom(participants).then((res: any) => {
+    // if (this.roomId !== undefined) {
+    //   this.socket.emit('leave-room', this.roomId);
+    // }
+    this._chatService.getChatByRoom(participants).then((res: any) => {
       this.roomId = res.roomId;
       if (this.roomId === -1) {
         this.createChatRoom(participants);
@@ -94,19 +76,26 @@ export class ChatComponent implements OnInit {
         this.getListMessageByRoomId();
       }
 
-      const indexRoom = this.listBlockChat.indexOf(this.roomId);
-      if (indexRoom < 0) {
+      if (this.listBlockChat.indexOf(this.roomId) < 0) {
         this.listBlockChat.push(this.roomId);
       }
 
       this.socket.emit('room', this.roomId);
+      this.socket.on(`new-message-${res.roomId}`, (data: any) => {
+        this.listUserChat.forEach(user => {
+          if (user._id === data.user) {
+            user.listMessage.push(data);
+            return;
+          }
+        });
+      });
     }, (err) => {
       console.log(err);
     });
   }
 
   createChatRoom(participants) {
-    this.chatService.createChatRoom(participants).then((res) => {
+    this._chatService.createChatRoom(participants).then((res) => {
       this.roomId = res
     }, (err) => {
       console.log(err);
@@ -114,33 +103,67 @@ export class ChatComponent implements OnInit {
   }
 
   getListMessageByRoomId() {
-    this.chatService.getListMessageByRoomId(JSON.stringify({ roomId: this.roomId })).then((res: any) => {
-      this.listMessage = res.listMessage;
+    this._chatService.getListMessageByRoomId(JSON.stringify({ roomId: this.roomId })).then((res: any) => {
+      this.listUserChat.forEach((user: User) => {
+        if (user._id === this.currentUser._id) {
+          user.listMessage = res.listMessage;
+          return;
+        }
+      })
     }, err => {
       console.log(err);
     });
 
   }
 
-  createMessage(valid: boolean): void {
+  createMessage(valid: boolean, user: User, _idRoom: string): void {
     if (valid) {
       const data = {
-        content: this.message,
-        user: this.user._id,
-        room: this.roomId
+        content: user.newMessage,
+        user: user._id,
+        room: _idRoom
       }
-      this.chatService.createMessage(JSON.stringify(data)).then((res: any) => {
+
+      this._chatService.createMessage(JSON.stringify(data)).then((res: any) => {
         this.socket.emit('save-message', data);
-        this.listMessage.push(data);
-        this.message = '';
+        user.listMessage.push({
+          _id: res._id,
+          content: data.content,
+          createdBy: data.user,
+          createdAt: new Date()
+        });
+        user.newMessage = '';
       }, err => {
         console.log(err);
       })
     }
   }
 
+  showUpload() {
+    this.btnUploadImg.nativeElement.click();
+  }
+
+  uploadImage(event: any) {
+    console.log(123);
+    // tslint:disable-next-line:prefer-const
+    let fileList: FileList = event.target.files;
+    if (event.target.files.length > 0) {
+      this._chatService.uploadFile(null, event.target.files)
+        .then((imageUrl: string) => {
+          console.log(imageUrl);
+          event.target.value = '';
+        });
+    }
+  }
+
   closeChat(index) {
-    index = this.listBlockChat.indexOf(index);
+    this.listUserChat.splice(index, 1);
     this.listBlockChat.splice(index, 1);
+  }
+
+  scrollToBottom(): void {
+    try {
+      this.divWrapper.nativeElement.scrollTop = this.divWrapper.nativeElement.scrollHeight;
+    } catch (err) { }
   }
 }

@@ -1,4 +1,3 @@
-import { DataService } from './../../core/services/data/data.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -10,7 +9,7 @@ export class BlogComponent implements OnInit {
 
   result: string;
 
-  constructor(private _dataService: DataService) { }
+  constructor() { }
 
   ngOnInit() {
     $.get('../../../assets/js/custom.js');
@@ -18,12 +17,6 @@ export class BlogComponent implements OnInit {
   }
 
   test() {
-    this._dataService.get('/').subscribe((response: string) => {
-      console.log(response);
-      this.result = response;
-    }, error => {
-      console.log("error");
-    })
   }
 
 }
