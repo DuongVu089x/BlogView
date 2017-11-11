@@ -1,3 +1,4 @@
+import { Room } from './../../../core/models/room.models';
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
@@ -41,6 +42,10 @@ export class HomeComponent implements OnInit {
     })
       .then((res: User[]) => {
         this.listFriends = res;
+        // tslint:disable-next-line:prefer-const
+        for (let user of this.listFriends) {
+          user.room = new Room();
+        }
       }, err => {
         console.log(err);
       });

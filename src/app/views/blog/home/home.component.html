@@ -1,6 +1,6 @@
 <div fxLayout="row" class="home-component">
   <app-menu fxFlex="20" fxShow.sm="false" fxShow.xs="false"></app-menu>
-  <div class="center" fxFlex="60">
+  <div fxFlex="60">
     <app-create-article></app-create-article>
     <app-list-article [artiles]="artiles" infinite-scroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="300" (scrolled)="onScroll()"></app-list-article>
   </div>

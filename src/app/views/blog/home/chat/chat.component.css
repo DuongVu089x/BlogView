@@ -34,12 +34,29 @@
   display: block;
 }
 
-.message-content p {
+.message-content span {
   word-wrap: break-word;
 }
 
-.message-content p.my-message {
-  text-align: end;
+.message-content span {
+  flex-direction: row-reverse;
+  display: block;
+  padding: 5px;
+  max-width: 200px;
+  width: fit-content;
+  border-radius: 10px;
+  clear: right;
+}
+
+.my-message span {
+  float: right;
+  color: white;
+  background: #ee6e73;
+}
+
+.their-message span {
+  color: black;
+  background: #EDE7F6;
 }
 
 img.avatar {

@@ -33,7 +33,6 @@ export class DataService {
 
     newHeader.append('Authorization',
       `Bearer ${JSON.parse(JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER))._body).token}`);
-
     return this._http.post(SystemConstants.BASE_API + url, data, { headers: newHeader }).map(this.extracData);
 
   }

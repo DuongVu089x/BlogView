@@ -7,6 +7,7 @@ import { ChatService } from './../../../../core/services/chat/chat.service';
 import { UploadService } from './../../../../core/services/upload/upload.service';
 import { DataService } from './../../../../core/services/data/data.service';
 import { User } from './../../../../core/models/user.model';
+import { IRoom, Room } from './../../../../core/models/room.models';
 
 @Component({
   selector: 'app-chat',
@@ -29,21 +30,22 @@ export class ChatComponent implements OnInit {
   public listFriends: User[];
 
   private listBlockChat: any[];
+  private currentRoomId: string;
 
-  private roomId: any;
+  private user: User = SystemConstants.USER;
 
-  user = JSON.parse(JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER))._body);
+  private currentUser: User;
 
-  currentUser: User;
-
-  positionTop: number;
-  maxWidth: number;
+  private positionTop: number;
+  private maxWidth: number;
 
   socket = io(SystemConstants.BASE_API);
 
   constructor(private _dataService: DataService,
     private _chatService: ChatService) {
     this.listBlockChat = [];
+
+    console.log(this.user);
   }
 
   ngOnInit() {
@@ -58,105 +60,118 @@ export class ChatComponent implements OnInit {
     this.listUserChat.push(user);
     this.currentUser = user;
 
-    this.getChatByRoom(JSON.stringify({
+    this.getChatByRoom(user);
+  }
+
+  getChatByRoom(user: User) {
+    // tslint:disable-next-line:prefer-const
+    let participants = JSON.stringify({
       myId: this.user._id,
       theirId: this.currentUser._id
-    }));
-  }
-
-  getChatByRoom(participants) {
-    // if (this.roomId !== undefined) {
-    //   this.socket.emit('leave-room', this.roomId);
-    // }
-    this._chatService.getChatByRoom(participants).then((res: any) => {
-      this.roomId = res.roomId;
-      if (this.roomId === -1) {
-        this.createChatRoom(participants);
-      } else {
-        this.getListMessageByRoomId();
-      }
-
-      if (this.listBlockChat.indexOf(this.roomId) < 0) {
-        this.listBlockChat.push(this.roomId);
-      }
-
-      this.socket.emit('room', this.roomId);
-      this.socket.on(`new-message-${res.roomId}`, (data: any) => {
-        this.listUserChat.forEach(user => {
-          if (user._id === data.user) {
-            user.listMessage.push(data);
-            return;
-          }
+    });
+    this._chatService.getChatByRoom(participants)
+      .then((res: any) => {
+        return user.room._id = res.roomId;
+      }, (err) => {
+        console.log(err);
+      }).then((roomId) => {
+        if (roomId === '-1') {
+          this.createChatRoom(participants, user);
+        } else {
+          this.getListMessageByRoomId(user);
+        }
+        if (this.listBlockChat.indexOf(roomId) < 0) {
+          this.listBlockChat.push(roomId);
+        }
+        this.socket.emit('room', roomId);
+        this.socket.on(`new-message-${roomId}`, (data: any) => {
+          this.listUserChat.forEach(us => {
+            if (us.room._id === data.room) {
+              us.room.listMessage.push(data);
+              return;
+            }
+          });
         });
       });
+  }
+
+  createChatRoom(participants, user: User) {
+    this._chatService.createChatRoom(participants).then((res: string) => {
+      user.room._id = res;
     }, (err) => {
       console.log(err);
     });
   }
 
-  createChatRoom(participants) {
-    this._chatService.createChatRoom(participants).then((res) => {
-      this.roomId = res
-    }, (err) => {
-      console.log(err);
-    });
-  }
-
-  getListMessageByRoomId() {
-    this._chatService.getListMessageByRoomId(JSON.stringify({ roomId: this.roomId })).then((res: any) => {
-      this.listUserChat.forEach((user: User) => {
-        if (user._id === this.currentUser._id) {
-          user.listMessage = res.listMessage;
-          return;
-        }
-      })
+  getListMessageByRoomId(user: User) {
+    this._chatService.getListMessageByRoomId(JSON.stringify({ roomId: user.room._id })).then((res: any) => {
+      user.room.listMessage = res.listMessage
     }, err => {
-      console.log(err);
+      console.error(err);
     });
 
   }
 
   createMessage(valid: boolean, user: User, _idRoom: string): void {
     if (valid) {
-      const data = {
+      this.sendMessageToServer(user, _idRoom, {
         content: user.newMessage,
-        user: user._id,
-        room: _idRoom
-      }
+        user: this.user._id,
+        room: _idRoom,
+        type: 'message'
+      });
+    }
+  }
 
-      this._chatService.createMessage(JSON.stringify(data)).then((res: any) => {
+  sendMessageToServer(user: User, _idRoom: string, data: any) {
+    this._chatService.createMessage(JSON.stringify(data))
+      .then((res: any) => {
         this.socket.emit('save-message', data);
-        user.listMessage.push({
+        console.log(data);
+        user.room.listMessage.push({
           _id: res._id,
           content: data.content,
-          createdBy: data.user,
-          createdAt: new Date()
+          user: data.user,
+          createdAt: new Date(),
+          type: data.type
         });
         user.newMessage = '';
       }, err => {
         console.log(err);
-      })
-    }
+      });
   }
 
-  showUpload() {
+  showUpload(blockChat: string, user: User) {
+    console.log(user._id);
+    this.currentRoomId = blockChat;
+    this.currentUser = user;
     this.btnUploadImg.nativeElement.click();
   }
 
   uploadImage(event: any) {
-    console.log(123);
     // tslint:disable-next-line:prefer-const
     let fileList: FileList = event.target.files;
     if (event.target.files.length > 0) {
       this._chatService.uploadFile(null, event.target.files)
-        .then((imageUrl: string) => {
-          console.log(imageUrl);
+        .then((imageUrl: any) => {
           event.target.value = '';
-        });
+          return imageUrl.filename;
+        }).then((filename: string) => {
+          this.sendMessageToServer(this.currentUser, this.currentRoomId, {
+            content: `${SystemConstants.BASE_API}/static/uploads/${filename}`,
+            user: this.user._id,
+            room: this.currentRoomId,
+            type: 'image'
+          });
+          console.log(this.currentUser._id);
+        }).catch(err => console.log(err));
     }
   }
 
-  closeChat(index) {
+  closeChat(index, roomId: string) {
+    if (roomId !== undefined) {
+      this.socket.emit('leave-room', roomId);
+    }
     this.listUserChat.splice(index, 1);
     this.listBlockChat.splice(index, 1);
   }
